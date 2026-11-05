@@ -3,7 +3,10 @@
 import Link from 'next/link'
 import { useCallback, useEffect, useState, useSyncExternalStore } from 'react'
 import { LabBackground } from '@/components/lab/lab-background'
+import { SiteMenu } from '@/components/lab/site-menu'
 import { ThemeToggle } from '@/components/lab/theme-toggle'
+import { ToolkitSection } from '@/components/lab/toolkit-section'
+import { DataFlowSection } from '@/components/lab/data-flow-section'
 import { profileQuery, profileRows, professionalProfile } from '@/lib/professional-profile'
 import { ProjectArchive } from './project-archive'
 
@@ -31,6 +34,22 @@ export function ProfileIntroduction() {
     setVisibleRows(profileRows.length)
     setPhase('introComplete')
   }, [])
+
+  useEffect(() => {
+    const skipForMenuNavigation = () => skipIntro()
+    window.addEventListener('blavk:skip-profile-intro', skipForMenuNavigation)
+    if (window.location.hash) skipIntro()
+    return () => window.removeEventListener('blavk:skip-profile-intro', skipForMenuNavigation)
+  }, [skipIntro])
+
+  useEffect(() => {
+    if (phase !== 'introComplete' || !window.location.hash) return
+    const targetId = window.location.hash.slice(1)
+    const timeout = window.setTimeout(() => {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })
+    }, 80)
+    return () => window.clearTimeout(timeout)
+  }, [phase, reducedMotion])
 
   useEffect(() => {
     if (phase !== 'typing') return
@@ -112,6 +131,7 @@ export function ProfileIntroduction() {
               </button>
             )}
             <ThemeToggle />
+            <SiteMenu />
           </div>
         </div>
       </header>
@@ -166,7 +186,7 @@ export function ProfileIntroduction() {
               </div>
               <dl>
                 {profileRows.slice(0, visibleRows).map(({ field, value }, index) => (
-                  <div key={field} className="grid grid-cols-[minmax(7.5rem,0.8fr)_minmax(0,1.5fr)] gap-4 border-b border-border/80 px-4 py-4 last:border-b-0 animate-reveal motion-reduce:animate-none sm:px-6" style={{ animationDelay: reducedMotion ? '0ms' : `${index * 25}ms` }}>
+                  <div id={field === 'Core Tools' ? 'profile-tools' : undefined} key={field} className="grid scroll-mt-24 grid-cols-[minmax(7.5rem,0.8fr)_minmax(0,1.5fr)] gap-4 border-b border-border/80 px-4 py-4 last:border-b-0 animate-reveal motion-reduce:animate-none sm:px-6" style={{ animationDelay: reducedMotion ? '0ms' : `${index * 25}ms` }}>
                     <dt className="font-mono text-xs leading-5 text-muted-foreground sm:text-sm">{field}</dt>
                     <dd className="min-w-0 break-words text-sm leading-5 text-foreground sm:text-base">{value}</dd>
                   </div>
@@ -177,7 +197,7 @@ export function ProfileIntroduction() {
         )}
 
         {aboutVisible && (
-          <section className="mt-12 max-w-3xl animate-fade-up motion-reduce:animate-none sm:mt-16" aria-labelledby="about-heading">
+          <section id="about-me" className="mt-12 scroll-mt-24 max-w-3xl animate-fade-up motion-reduce:animate-none sm:mt-16" aria-labelledby="about-heading">
             <h2 id="about-heading" className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Beyond the data.</h2>
             <div className="mt-4 text-pretty text-sm leading-7 text-muted-foreground sm:text-base sm:leading-8">
               {professionalProfile.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
@@ -196,7 +216,13 @@ export function ProfileIntroduction() {
           </div>
         )}
 
-        {phase === 'introComplete' && <ProjectArchive />}
+        {phase === 'introComplete' && (
+          <>
+            <ProjectArchive />
+            <ToolkitSection />
+            <DataFlowSection />
+          </>
+        )}
       </main>
     </div>
   )

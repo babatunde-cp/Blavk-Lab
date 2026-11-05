@@ -128,11 +128,13 @@ function ProjectCard({ project }: { project: ArchiveProject }) {
 export function ProjectArchive() {
   const reducedMotion = useReducedMotion()
   const categoryRef = useRef<HTMLElement>(null)
+  const categoryJumped = useRef(false)
   const [categoryStarted, setCategoryStarted] = useState(false)
   const [typedCharacters, setTypedCharacters] = useState(0)
   const [visibleGroups, setVisibleGroups] = useState(0)
   const initialized = typedCharacters >= CATEGORY.length
   const engineeringRef = useRef<HTMLElement>(null)
+  const engineeringJumped = useRef(false)
   const [engineeringStarted, setEngineeringStarted] = useState(false)
   const [engineeringTyped, setEngineeringTyped] = useState(0)
   const engineeringInitialized = engineeringTyped >= 'ENGINEERING'.length
@@ -151,8 +153,48 @@ export function ProjectArchive() {
   }, [categoryStarted])
 
   useEffect(() => {
+    const revealForHash = () => {
+      const targetId = window.location.hash.slice(1)
+      if (targetId === 'analytics' || targetId === 'analytics-category-heading' || targetId.startsWith('tool-')) {
+        categoryJumped.current = true
+        setCategoryStarted(true)
+        setTypedCharacters(CATEGORY.length)
+        setVisibleGroups(archiveToolGroups.length)
+      }
+      if (targetId === 'engineering' || targetId === 'engineering-category-heading') {
+        categoryJumped.current = true
+        engineeringJumped.current = true
+        setCategoryStarted(true)
+        setTypedCharacters(CATEGORY.length)
+        setVisibleGroups(archiveToolGroups.length)
+        setEngineeringStarted(true)
+        setEngineeringTyped('ENGINEERING'.length)
+      }
+    }
+    revealForHash()
+    window.addEventListener('hashchange', revealForHash)
+    return () => window.removeEventListener('hashchange', revealForHash)
+  }, [])
+
+  useEffect(() => {
+    const targetId = window.location.hash.slice(1)
+    if (!targetId) return
+    const targetReady =
+      (targetId === 'tool-excel' || targetId === 'tool-power-bi' || targetId === 'tool-sql')
+        ? visibleGroups === archiveToolGroups.length
+        : targetId === 'engineering'
+          ? engineeringInitialized
+          : true
+    if (!targetReady) return
+    const timeout = window.setTimeout(() => {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })
+    }, 80)
+    return () => window.clearTimeout(timeout)
+  }, [visibleGroups, engineeringInitialized, reducedMotion])
+
+  useEffect(() => {
     if (!categoryStarted) return
-    if (reducedMotion) {
+    if (reducedMotion || categoryJumped.current) {
       setTypedCharacters(CATEGORY.length)
       return
     }
@@ -167,7 +209,7 @@ export function ProjectArchive() {
 
   useEffect(() => {
     if (!initialized) return
-    if (reducedMotion) {
+    if (reducedMotion || categoryJumped.current) {
       setVisibleGroups(archiveToolGroups.length)
       return
     }
@@ -190,7 +232,7 @@ export function ProjectArchive() {
 
   useEffect(() => {
     if (!engineeringStarted) return
-    if (reducedMotion) {
+    if (reducedMotion || engineeringJumped.current) {
       setEngineeringTyped('ENGINEERING'.length)
       return
     }
@@ -204,7 +246,7 @@ export function ProjectArchive() {
   }, [engineeringStarted, reducedMotion])
 
   return (
-    <section className="ocean-archive relative isolate mt-20 overflow-hidden border-y border-lab-blue/15 px-4 py-16 sm:mt-28 sm:px-8 sm:py-24" aria-labelledby="selected-works-heading">
+    <section id="index-logs" className="ocean-archive relative isolate mt-20 scroll-mt-20 overflow-hidden border-y border-lab-blue/15 px-4 py-16 sm:mt-28 sm:px-8 sm:py-24" aria-labelledby="selected-works-heading">
       <OceanicAtmosphere />
       <div className="relative z-10 mx-auto max-w-4xl">
         <header className="max-w-2xl">
@@ -217,7 +259,7 @@ export function ProjectArchive() {
           <span>SOURCE DATA <b className="px-1 text-lab-cyan">→</b> EXCEL · POWER BI · SQL <b className="px-1 text-lab-cyan">→</b> ANALYSIS <b className="px-1 text-lab-cyan">→</b> INSIGHTS</span>
         </div>
 
-        <section ref={categoryRef} className="relative mt-14 scroll-mt-24" aria-labelledby="analytics-category-heading">
+        <section id="analytics" ref={categoryRef} className="relative mt-14 scroll-mt-24" aria-labelledby="analytics-category-heading">
           <div className="archive-flow-track mb-5" aria-hidden="true"><span className={categoryStarted ? 'archive-flow-sweep' : ''} /></div>
           <div className="flex flex-wrap items-end justify-between gap-4 border-b border-lab-blue/20 pb-5">
             <div>
@@ -228,10 +270,10 @@ export function ProjectArchive() {
 
           <div className="mt-7 space-y-10 sm:mt-9 sm:space-y-14">
             {archiveToolGroups.map(({ tool, description }, index) => visibleGroups > index && (
-              <section key={tool} className="animate-fade-up scroll-mt-24 motion-reduce:animate-none" aria-labelledby={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}`}>
+              <section id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}`} key={tool} className="animate-fade-up scroll-mt-24 motion-reduce:animate-none" aria-labelledby={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}-heading`}>
                 <div className="mb-5 flex flex-col gap-1.5 border-l-2 border-lab-cyan/50 pl-4 sm:mb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
                   <div>
-                    <h4 id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}`} className="text-xl font-semibold tracking-wide text-foreground sm:text-2xl">{tool.toUpperCase()}</h4>
+                    <h4 id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}-heading`} className="text-xl font-semibold tracking-wide text-foreground sm:text-2xl">{tool.toUpperCase()}</h4>
                   </div>
                   <p className="max-w-xl text-sm leading-6 text-muted-foreground">{description}</p>
                 </div>
@@ -243,7 +285,7 @@ export function ProjectArchive() {
           </div>
         </section>
 
-        <section ref={engineeringRef} className="relative mt-24 scroll-mt-24 border-t border-lab-blue/20 pt-12 sm:mt-32 sm:pt-16" aria-labelledby="engineering-category-heading">
+        <section id="engineering" ref={engineeringRef} className="relative mt-24 scroll-mt-24 border-t border-lab-blue/20 pt-12 sm:mt-32 sm:pt-16" aria-labelledby="engineering-category-heading">
           <div className="archive-flow-track mb-5" aria-hidden="true"><span className={engineeringStarted ? 'archive-flow-sweep' : ''} /></div>
           <div className="flex flex-wrap items-end justify-between gap-4 border-b border-lab-blue/20 pb-5">
             <div>

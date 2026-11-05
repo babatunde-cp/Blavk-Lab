@@ -1,5 +1,6 @@
 import { RotateCcw, SkipForward } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { SiteMenu } from './site-menu'
 import { ThemeToggle } from './theme-toggle'
 
 export type LabStatus = 'booting' | 'awaiting' | 'running' | 'ready'
@@ -49,6 +50,7 @@ export function LabHeader({ status, onSkip, onReplay }: LabHeaderProps) {
             </button>
           )}
           <ThemeToggle />
+          <SiteMenu />
         </div>
       </div>
     </header>
