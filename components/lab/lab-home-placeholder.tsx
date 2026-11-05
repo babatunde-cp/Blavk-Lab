@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useSyncExternalStore } from 'react'
 import { readSessionName } from '@/lib/visitor-profile'
 import { LabBackground } from './lab-background'
+import { SiteMenu } from './site-menu'
 import { ThemeToggle } from './theme-toggle'
 
 const noopSubscribe = () => () => {}
@@ -14,7 +15,10 @@ export function LabHomePlaceholder() {
   return (
     <div className="relative isolate min-h-dvh">
       <LabBackground stage={9} />
-      <ThemeToggle className="fixed top-3 right-4 z-20" />
+      <div className="fixed top-3 right-4 z-20 flex items-center gap-2">
+        <ThemeToggle />
+        <SiteMenu />
+      </div>
       <main className="animate-fade-up mx-auto flex min-h-dvh max-w-2xl flex-col items-center justify-center gap-6 px-4 text-center">
         <p className="font-mono text-xs tracking-[0.3em] text-lab-cyan">SESSION ACTIVE</p>
         <h1 className="font-sans text-3xl font-semibold tracking-[0.12em] text-balance text-foreground sm:text-5xl">
