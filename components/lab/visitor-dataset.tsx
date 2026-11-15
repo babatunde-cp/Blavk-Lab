@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { formatLocalTime, formatViewport, type FieldSource, type ProfileField } from '@/lib/visitor-profile'
 
 const ROW_INTERVAL_MS = 110
+const ROW_TONES = ['tone-sky', 'tone-cyan', 'tone-violet', 'tone-amber', 'tone-teal', 'tone-rose']
 
 const SOURCE_STYLE: Record<FieldSource, { label: string; className: string }> = {
   detected: { label: 'detected', className: 'text-lab-cyan border-lab-cyan/30 bg-lab-cyan/5' },
@@ -95,14 +96,14 @@ export function VisitorDataset({ name, fields, instant, onRevealed }: VisitorDat
             </tr>
           </thead>
           <tbody>
-            {fields.slice(0, visible).map((field) => {
+            {fields.slice(0, visible).map((field, rowIndex) => {
               const source = SOURCE_STYLE[field.source]
               return (
                 <tr
                   key={field.key}
-                  className={cn('border-b border-border/60 last:border-0 hover:bg-accent/40', !instant && 'animate-reveal')}
+                  className={cn('lab-tone', ROW_TONES[rowIndex % ROW_TONES.length], 'lab-tone-row border-b border-border/60 last:border-0 hover:bg-accent/40', !instant && 'animate-reveal')}
                 >
-                  <th scope="row" className="px-4 py-2 text-left align-top font-normal text-lab-blue sm:px-5">
+                  <th scope="row" className="lab-tone-label px-4 py-2 text-left align-top font-normal sm:px-5">
                     {field.key}
                   </th>
                   <td className="px-4 py-2 align-top break-words text-foreground">

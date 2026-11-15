@@ -74,4 +74,12 @@ export const engineeringProjects: readonly ArchiveProject[] = [
     tools: ['SQL Server', 'T-SQL', 'Medallion Architecture', 'ETL', 'Data Warehousing'], publishedScope: '77K+ e-commerce records unified · $500K ad-spend recommendation',
     projectUrl: 'https://github.com/babatunde-cp/ShopSphere-Data-Warehouse-and-Analytics-Project', image: '/images/projects/shopsphere-warehouse.gif', imageAlt: 'ShopSphere data warehouse pipeline diagram showing website and mobile sources flowing through Bronze, Silver, and Gold layers to analysis', preview: 'schema',
   },
+  {
+    id: 'northstar-fmcg-data-pipeline', title: 'Northstar FMCG Sales & Inventory Pipeline', category: 'Engineering', tool: 'Engineering', status: 'In Progress',
+    details: 'Python loads three Excel workbooks into SQL Server, applies fix, flag, and quarantine rules, then builds a curated star schema with 13 reporting views. Reconciliation checks and a 31-test suite support the workflow; automated malformed-file tests and a one-command run remain on the roadmap.',
+    businessQuestion: 'How can FMCG sales and inventory workbooks become trusted, reconciled reporting data?',
+    approach: 'Load raw workbook data with Python, apply explicit quality outcomes, model three fact tables and six dimensions, then validate reporting views against source data.',
+    tools: ['Python · pandas', 'SQL Server', 'pytest', 'Git & GitHub'], publishedScope: '3 workbooks · 3 fact tables · 6 dimensions · 13 views',
+    projectUrl: 'https://github.com/babatunde-cp/northstar-fmcg-data-pipeline', image: '/images/projects/northstar-fmcg-data-pipeline.svg', imageAlt: 'Northstar FMCG data flow from Excel workbooks through raw storage, data quality checks, clean staging, a curated star schema, reporting views, quarantine, and audit logs', preview: 'schema',
+  },
 ]

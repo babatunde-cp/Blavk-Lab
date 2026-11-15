@@ -5,31 +5,39 @@ import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatTimestamp } from '@/lib/visitor-profile'
 
-type Tone = 'blue' | 'purple' | 'cyan'
+type Tone = 'sky' | 'cyan' | 'violet' | 'teal' | 'indigo' | 'amber' | 'emerald'
 
 export const PIPELINE_STEPS: { tag: string; message: string; tone: Tone }[] = [
-  { tag: 'INIT', message: 'Initializing BLAVK DATA LAB', tone: 'blue' },
-  { tag: 'INFO', message: 'Establishing visitor session...', tone: 'blue' },
-  { tag: 'INGEST', message: 'Collecting available client metadata...', tone: 'blue' },
-  { tag: 'VALIDATE', message: 'Validating incoming metadata fields...', tone: 'purple' },
-  { tag: 'TRANSFORM', message: 'Normalizing device and display attributes...', tone: 'purple' },
-  { tag: 'MODEL', message: 'Structuring visitor data into a tabular schema...', tone: 'purple' },
-  { tag: 'ANALYTICS', message: 'Generating visitor profile summary...', tone: 'cyan' },
-  { tag: 'LOAD', message: 'Loading processed records into the visitor interface...', tone: 'cyan' },
-  { tag: 'SUCCESS', message: 'Visitor data pipeline completed ✓', tone: 'cyan' },
+  { tag: 'INIT', message: 'Initializing BLAVK DATA LAB', tone: 'sky' },
+  { tag: 'INFO', message: 'Establishing visitor session...', tone: 'cyan' },
+  { tag: 'INGEST', message: 'Collecting available client metadata...', tone: 'teal' },
+  { tag: 'VALIDATE', message: 'Validating incoming metadata fields...', tone: 'emerald' },
+  { tag: 'TRANSFORM', message: 'Normalizing device and display attributes...', tone: 'indigo' },
+  { tag: 'MODEL', message: 'Structuring visitor data into a tabular schema...', tone: 'violet' },
+  { tag: 'ANALYTICS', message: 'Generating visitor profile summary...', tone: 'amber' },
+  { tag: 'LOAD', message: 'Loading processed records into the visitor interface...', tone: 'sky' },
+  { tag: 'SUCCESS', message: 'Visitor data pipeline completed ✓', tone: 'emerald' },
 ]
 
 const STEP_INTERVAL_MS = 620
 
 const TONE_TEXT: Record<Tone, string> = {
-  blue: 'text-lab-blue',
-  purple: 'text-lab-purple',
-  cyan: 'text-lab-cyan',
+  sky: 'text-sky-600 dark:text-sky-300',
+  cyan: 'text-cyan-700 dark:text-cyan-300',
+  violet: 'text-violet-700 dark:text-violet-300',
+  teal: 'text-teal-700 dark:text-teal-300',
+  indigo: 'text-indigo-700 dark:text-indigo-300',
+  amber: 'text-amber-700 dark:text-amber-300',
+  emerald: 'text-emerald-700 dark:text-emerald-300',
 }
 const TONE_DOT: Record<Tone, string> = {
-  blue: 'bg-lab-blue',
-  purple: 'bg-lab-purple',
-  cyan: 'bg-lab-cyan',
+  sky: 'bg-sky-500',
+  cyan: 'bg-cyan-500',
+  violet: 'bg-violet-500',
+  teal: 'bg-teal-500',
+  indigo: 'bg-indigo-500',
+  amber: 'bg-amber-500',
+  emerald: 'bg-emerald-500',
 }
 
 type PipelineLogProps = {
@@ -80,7 +88,7 @@ export function PipelineLog({ instant, onProgress, onComplete }: PipelineLogProp
         <h2 id="pipeline-heading" className="font-mono text-xs tracking-[0.2em] text-muted-foreground">
           PIPELINE · client_side_demo
         </h2>
-        <span className={cn('font-mono text-xs', done ? 'text-lab-cyan' : 'text-lab-purple')}>
+        <span className={cn('font-mono text-xs', done ? 'text-emerald-700 dark:text-emerald-300' : 'text-violet-700 dark:text-violet-300')}>
           {done ? 'COMPLETED' : `RUNNING ${timestamps.length}/${total}`}
         </span>
       </div>

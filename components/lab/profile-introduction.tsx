@@ -7,11 +7,14 @@ import { SiteMenu } from '@/components/lab/site-menu'
 import { ThemeToggle } from '@/components/lab/theme-toggle'
 import { ToolkitSection } from '@/components/lab/toolkit-section'
 import { DataFlowSection } from '@/components/lab/data-flow-section'
+import { ContactSection } from '@/components/lab/contact-section'
+import { Download } from 'lucide-react'
 import { profileQuery, profileRows, professionalProfile } from '@/lib/professional-profile'
 import { ProjectArchive } from './project-archive'
 
 const noopSubscribe = () => () => {}
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const profileRowTones = ['tone-sky', 'tone-violet', 'tone-teal', 'tone-amber', 'tone-rose']
 
 type IntroPhase = 'typing' | 'query' | 'success' | 'editorExit' | 'heading' | 'loadingProfile' | 'profileVisible' | 'aboutVisible' | 'introComplete'
 
@@ -137,19 +140,19 @@ export function ProfileIntroduction() {
       </header>
 
       <main className="mx-auto flex w-full max-w-4xl flex-col px-4 pt-8 pb-20 sm:pt-12 sm:pb-24">
-        <div className="mb-8 flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-muted-foreground">
-          <span className="size-1.5 rounded-full bg-lab-cyan" aria-hidden="true" />
+        <div className="lab-tone tone-sky mb-8 flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-muted-foreground">
+          <span className="size-1.5 rounded-full bg-[color:var(--portfolio-tone)]" aria-hidden="true" />
           PROFESSIONAL PROFILE <span className="text-border">/</span> {professionalProfile.id}
         </div>
 
         {editorVisible && (
           <section
             aria-label="Profile query editor"
-            className={`overflow-hidden rounded-lg border border-border bg-card shadow-[0_16px_60px_-36px_var(--lab-blue)] transition-[max-height,opacity,transform,margin] duration-300 motion-reduce:transition-none ${phase === 'editorExit' ? 'mb-0 max-h-0 -translate-y-2 border-transparent opacity-0' : 'mb-10 max-h-[34rem] opacity-100'}`}
+            className={`lab-tone tone-violet lab-tone-surface relative overflow-hidden rounded-lg border bg-card shadow-[0_16px_60px_-36px_var(--lab-blue)] transition-[max-height,opacity,transform,margin] duration-300 motion-reduce:transition-none ${phase === 'editorExit' ? 'mb-0 max-h-0 -translate-y-2 border-transparent opacity-0' : 'mb-10 max-h-[34rem] opacity-100'}`}
           >
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <span className="font-mono text-xs text-muted-foreground">profile_lookup.sql</span>
-              <span className="font-mono text-[10px] tracking-widest text-lab-cyan">READ ONLY</span>
+              <span className="lab-tone-label font-mono text-[10px] tracking-widest">READ ONLY</span>
             </div>
             <pre className="overflow-x-auto px-4 py-5 font-mono text-[11px] leading-6 text-foreground sm:px-6 sm:text-sm" aria-label="SQL query">
               <code>{displayedCode.split('\n').map((line, index) => (
@@ -158,8 +161,8 @@ export function ProfileIntroduction() {
             </pre>
             {(phase === 'query' || phase === 'success') && (
               <div className="border-t border-border px-4 py-3 font-mono text-xs sm:px-6" role="status" aria-live="polite">
-                <p className="text-lab-blue">[QUERY] Retrieving profile data...</p>
-                {phase === 'success' && <p className="mt-1 text-lab-cyan">[SUCCESS] Profile data retrieved ✓</p>}
+                <p className="text-sky-500 dark:text-sky-300">[QUERY] Retrieving profile data...</p>
+                {phase === 'success' && <p className="mt-1 text-emerald-600 dark:text-emerald-300">[SUCCESS] Profile data retrieved ✓</p>}
               </div>
             )}
           </section>
@@ -180,14 +183,14 @@ export function ProfileIntroduction() {
 
         {tableVisible && (
           <section className="mt-8 animate-fade-up motion-reduce:animate-none" aria-label="Retrieved professional profile">
-            <div className="overflow-hidden rounded-lg border border-border bg-card/90">
+            <div className="lab-tone tone-teal lab-tone-surface relative overflow-hidden rounded-lg border bg-card/90">
               <div className="grid grid-cols-[minmax(7.5rem,0.8fr)_minmax(0,1.5fr)] gap-4 border-b border-border bg-muted/40 px-4 py-3 font-mono text-[10px] tracking-[0.13em] text-muted-foreground sm:px-6 sm:text-xs">
                 <span>PROFILE FIELD</span><span>RETRIEVED VALUE</span>
               </div>
               <dl>
                 {profileRows.slice(0, visibleRows).map(({ field, value }, index) => (
-                  <div id={field === 'Core Tools' ? 'profile-tools' : undefined} key={field} className="grid scroll-mt-24 grid-cols-[minmax(7.5rem,0.8fr)_minmax(0,1.5fr)] gap-4 border-b border-border/80 px-4 py-4 last:border-b-0 animate-reveal motion-reduce:animate-none sm:px-6" style={{ animationDelay: reducedMotion ? '0ms' : `${index * 25}ms` }}>
-                    <dt className="font-mono text-xs leading-5 text-muted-foreground sm:text-sm">{field}</dt>
+                  <div id={field === 'Core Tools' ? 'profile-tools' : undefined} key={field} className={`lab-tone ${profileRowTones[index % profileRowTones.length]} lab-tone-row grid scroll-mt-24 grid-cols-[minmax(7.5rem,0.8fr)_minmax(0,1.5fr)] gap-4 border-b border-border/80 px-4 py-4 last:border-b-0 animate-reveal motion-reduce:animate-none sm:px-6`} style={{ animationDelay: reducedMotion ? '0ms' : `${index * 25}ms` }}>
+                    <dt className="lab-tone-label font-mono text-xs leading-5 sm:text-sm">{field}</dt>
                     <dd className="min-w-0 break-words text-sm leading-5 text-foreground sm:text-base">{value}</dd>
                   </div>
                 ))}
@@ -197,12 +200,12 @@ export function ProfileIntroduction() {
         )}
 
         {aboutVisible && (
-          <section id="about-me" className="mt-12 scroll-mt-24 max-w-3xl animate-fade-up motion-reduce:animate-none sm:mt-16" aria-labelledby="about-heading">
-            <h2 id="about-heading" className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Beyond the data.</h2>
+          <section id="about-me" className="lab-tone tone-amber mt-12 scroll-mt-24 max-w-3xl animate-fade-up motion-reduce:animate-none sm:mt-16" aria-labelledby="about-heading">
+            <h2 id="about-heading" className="lab-tone-label text-2xl font-semibold tracking-tight sm:text-3xl">Beyond the data.</h2>
             <div className="mt-4 text-pretty text-sm leading-7 text-muted-foreground sm:text-base sm:leading-8">
               {professionalProfile.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
-            <p className="mt-5 border-l-2 border-lab-cyan/50 bg-lab-blue/5 px-4 py-3 font-mono text-[11px] leading-5 text-lab-cyan sm:text-xs">
+            <p className="lab-tone-section-rule mt-5 border-l-2 bg-[color-mix(in_oklch,var(--portfolio-tone)_7%,transparent)] px-4 py-3 font-mono text-[11px] leading-5 text-amber-700 dark:text-amber-200 sm:text-xs">
               Business questions. Analytical thinking. Data-driven solutions.
             </p>
           </section>
@@ -210,8 +213,9 @@ export function ProfileIntroduction() {
 
         {phase === 'introComplete' && (
           <div className="mt-6 animate-fade-up motion-reduce:animate-none">
-            <a href="/Babatunde_Kareem_CV.pdf" download="Babatunde_Kareem_CV.pdf" aria-label="Download Babatunde Kareem's CV" title="LORE DROP" className="inline-flex min-h-11 items-center gap-3 rounded-lg border border-lab-cyan/35 bg-lab-blue/5 px-4 py-2.5 font-mono text-xs tracking-[0.12em] text-lab-cyan transition-colors hover:border-lab-cyan/70 hover:bg-lab-cyan/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-cyan">
+            <a href="/Babatunde_Kareem_CV.pdf" download="Babatunde_Kareem_CV.pdf" aria-label="Download Babatunde Kareem's CV" title="LORE DROP" className="lab-tone tone-emerald lab-tone-link inline-flex min-h-11 items-center gap-3 rounded-lg border px-4 py-2.5 font-mono text-xs tracking-[0.12em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400">
               <span>LORE DROP</span>
+              <Download aria-hidden="true" className="size-3.5" />
             </a>
           </div>
         )}
@@ -221,6 +225,10 @@ export function ProfileIntroduction() {
             <ProjectArchive />
             <ToolkitSection />
             <DataFlowSection />
+            <ContactSection />
+            <footer className="border-t border-border/60 px-4 py-6 text-center font-mono text-[10px] tracking-[0.14em] text-muted-foreground sm:py-8" aria-label="Copyright">
+              <p>© Babatunde Kareem</p>
+            </footer>
           </>
         )}
       </main>

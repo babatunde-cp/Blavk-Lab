@@ -91,22 +91,24 @@ const stages = [
   },
 ] as const
 
+const stageAccents = ['tone-sky', 'tone-cyan', 'tone-teal', 'tone-emerald', 'tone-indigo', 'tone-violet', 'tone-rose', 'tone-amber', 'tone-sky', 'tone-amber']
+
 export function DataFlowSection() {
   return (
     <section id="data-flow" className="relative scroll-mt-20 border-t border-lab-blue/20 px-4 py-16 sm:px-8 sm:py-24" aria-labelledby="data-flow-heading">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_12%,oklch(0.55_0.16_205_/_0.10),transparent_42%),radial-gradient(ellipse_at_88%_80%,oklch(0.5_0.18_260_/_0.08),transparent_40%)]" />
       <div className="relative z-10 mx-auto max-w-4xl">
         <header className="max-w-2xl">
-          <p className="font-mono text-[10px] tracking-[0.2em] text-lab-cyan">FROM RAW INPUT TO USEFUL OUTPUT</p>
+          <p className="lab-tone tone-sky lab-tone-label font-mono text-[10px] tracking-[0.2em]">FROM RAW INPUT TO USEFUL OUTPUT</p>
           <h2 id="data-flow-heading" className="mt-3 text-balance font-mono text-2xl font-semibold tracking-[0.06em] text-foreground sm:text-3xl">HOW YOUR DATA SHOULD FLOW</h2>
           <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">A practical route from incoming data to reliable decisions.</p>
         </header>
 
         <ol className="mt-8 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
-          {stages.map((stage) => (
-            <li key={stage.number} className={`min-w-0 rounded-xl border bg-gradient-to-br p-4 shadow-[0_14px_44px_-36px_var(--lab-blue)] sm:p-5 ${stage.tone}`}>
+          {stages.map((stage, index) => (
+            <li key={stage.number} className={`lab-tone ${stageAccents[index]} min-w-0 rounded-xl border bg-gradient-to-br p-4 shadow-[0_14px_44px_-36px_var(--lab-blue)] sm:p-5 ${stage.tone}`}>
               <div className="flex items-start gap-3">
-                <span className="shrink-0 rounded-md border border-current/15 bg-background/45 px-2 py-1 font-mono text-[11px] tracking-wider text-lab-cyan">{stage.number} -</span>
+                <span className="lab-tone-label shrink-0 rounded-md border border-current/15 bg-background/45 px-2 py-1 font-mono text-[11px] tracking-wider">{stage.number} -</span>
                 <h3 className="pt-1 font-mono text-xs font-semibold tracking-[0.1em] text-foreground sm:text-sm">{stage.title}</h3>
               </div>
               <div className="mt-4 space-y-2 border-t border-border/70 pt-3 text-sm leading-6 text-muted-foreground sm:text-base">

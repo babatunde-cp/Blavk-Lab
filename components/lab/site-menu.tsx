@@ -6,10 +6,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 
 const sections = [
-  { label: 'ABOUT', detail: 'Beyond the data', id: 'about-me' },
-  { label: 'PROJECTS', detail: 'Project archive', id: 'index-logs' },
-  { label: 'TOOLKITS', detail: 'Data workflow', id: 'toolkits' },
-  { label: 'DATA FLOW', detail: 'Raw to reliable', id: 'data-flow' },
+  { label: 'ABOUT', detail: 'Beyond the data', id: 'about-me', tone: 'tone-amber' },
+  { label: 'PROJECTS', detail: 'Project archive', id: 'index-logs', tone: 'tone-cyan' },
+  { label: 'TOOLKITS', detail: 'Data workflow', id: 'toolkits', tone: 'tone-violet' },
+  { label: 'DATA FLOW', detail: 'Raw to reliable', id: 'data-flow', tone: 'tone-emerald' },
+  { label: 'CONTACTS', detail: 'Connect with me', id: 'contacts', tone: 'tone-rose' },
 ] as const
 
 export function SiteMenu() {
@@ -55,7 +56,7 @@ export function SiteMenu() {
         >
           <p className="border-b border-border/80 px-2 pb-3 font-mono text-[10px] tracking-[0.18em] text-lab-cyan">SITE_INDEX <span className="text-muted-foreground">// 01</span></p>
           <ul className="mt-2 space-y-1">
-            {sections.map(({ label, detail, id }, index) => (
+            {sections.map(({ label, detail, id, tone }, index) => (
               <li key={id}>
                 <Link
                   href={sectionHref(id)}
@@ -65,21 +66,17 @@ export function SiteMenu() {
                       window.dispatchEvent(new Event('blavk:skip-profile-intro'))
                     }
                   }}
-                  className="group flex min-h-10 items-center justify-between gap-4 rounded-md px-2.5 py-2 text-sm text-foreground transition-colors hover:bg-lab-blue/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-cyan"
+                  className={`lab-tone ${tone} group flex min-h-10 items-center justify-between gap-4 rounded-md border-l-2 border-transparent px-2.5 py-2 text-sm text-foreground transition-colors hover:border-[color:var(--portfolio-tone)] hover:bg-[color-mix(in_oklch,var(--portfolio-tone)_8%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-cyan`}
                 >
                   <span className="flex items-center gap-3">
-                    <span className="font-mono text-[10px] text-muted-foreground">0{index + 1}</span>
-                    <span className="font-mono text-xs tracking-[0.1em] group-hover:text-lab-cyan">{label}</span>
+                    <span className="lab-tone-label font-mono text-[10px]">0{index + 1}</span>
+                    <span className="font-mono text-xs tracking-[0.1em] group-hover:text-[color:var(--portfolio-tone)]">{label}</span>
                   </span>
                   <span className="text-right text-[11px] text-muted-foreground">{detail}</span>
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="mt-2 flex min-h-10 items-center justify-between rounded-md border-t border-border/80 px-2.5 pt-2 font-mono text-[10px] tracking-[0.1em]">
-            <span className="text-muted-foreground">CONTACTS</span>
-            <span className="text-lab-cyan/80">COMING SOON</span>
-          </div>
         </nav>
       )}
     </div>
