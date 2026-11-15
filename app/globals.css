@@ -178,6 +178,8 @@
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
 }
+.lab-background-flow-quiet { opacity: .24; filter: blur(.7px); }
+.lab-background-flow-quiet .lab-background-flow-path { animation: lab-dash 26s linear infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -191,7 +193,8 @@
   .lab-scanbar,
   .animate-drift,
   .animate-dash,
-  .animate-flow {
+  .animate-flow,
+  .lab-background-flow-quiet .lab-background-flow-path {
     animation: none !important;
   }
 }
@@ -201,6 +204,8 @@
   background-image:
     radial-gradient(ellipse at 78% 12%, oklch(0.48 0.18 232 / 0.16), transparent 37%),
     radial-gradient(ellipse at 14% 64%, oklch(0.46 0.14 210 / 0.10), transparent 34%),
+    radial-gradient(ellipse at 88% 76%, oklch(0.42 0.16 300 / 0.075), transparent 32%),
+    radial-gradient(ellipse at 24% 18%, oklch(0.52 0.13 150 / 0.055), transparent 28%),
     linear-gradient(180deg, color-mix(in oklch, var(--background) 94%, #062645) 0%, color-mix(in oklch, var(--background) 88%, #03162b) 48%, color-mix(in oklch, var(--background) 94%, #062645) 100%);
 }
 .ocean-archive-atmosphere { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
@@ -228,6 +233,32 @@
 .project-flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .project-flip-back { transform: rotateY(180deg); }
 .status-dot-completed { animation: status-pulse 1.8s ease-in-out infinite; box-shadow: 0 0 9px oklch(0.76 0.17 150 / .55); }
+
+/* Reusable, restrained accent variations carried across the whole portfolio. */
+.tone-sky { --portfolio-tone: oklch(0.50 0.16 230); }
+.tone-cyan { --portfolio-tone: oklch(0.49 0.13 198); }
+.tone-teal { --portfolio-tone: oklch(0.48 0.13 176); }
+.tone-emerald { --portfolio-tone: oklch(0.48 0.14 150); }
+.tone-indigo { --portfolio-tone: oklch(0.48 0.17 267); }
+.tone-violet { --portfolio-tone: oklch(0.49 0.18 300); }
+.tone-rose { --portfolio-tone: oklch(0.49 0.17 350); }
+.tone-amber { --portfolio-tone: oklch(0.54 0.15 82); }
+.dark .tone-sky { --portfolio-tone: oklch(0.76 0.15 230); }
+.dark .tone-cyan { --portfolio-tone: oklch(0.78 0.13 198); }
+.dark .tone-teal { --portfolio-tone: oklch(0.74 0.13 176); }
+.dark .tone-emerald { --portfolio-tone: oklch(0.75 0.14 150); }
+.dark .tone-indigo { --portfolio-tone: oklch(0.73 0.16 267); }
+.dark .tone-violet { --portfolio-tone: oklch(0.76 0.17 300); }
+.dark .tone-rose { --portfolio-tone: oklch(0.75 0.16 350); }
+.dark .tone-amber { --portfolio-tone: oklch(0.82 0.14 82); }
+.lab-tone-surface { border-color: color-mix(in oklch, var(--portfolio-tone) 38%, var(--border)); background-image: linear-gradient(135deg, color-mix(in oklch, var(--portfolio-tone) 10%, transparent), transparent 62%); }
+.lab-tone-surface::before { content: ''; position: absolute; inset: 0 0 auto; height: 2px; background: linear-gradient(90deg, transparent, var(--portfolio-tone), transparent); opacity: .75; pointer-events: none; }
+.lab-tone-label { color: var(--portfolio-tone); }
+.lab-tone-row { background: linear-gradient(90deg, color-mix(in oklch, var(--portfolio-tone) 5%, transparent), transparent 72%); }
+.lab-tone-link { border-color: color-mix(in oklch, var(--portfolio-tone) 40%, var(--border)); color: var(--portfolio-tone); background: color-mix(in oklch, var(--portfolio-tone) 5%, transparent); }
+.lab-tone-link:hover { border-color: color-mix(in oklch, var(--portfolio-tone) 72%, var(--border)); background: color-mix(in oklch, var(--portfolio-tone) 11%, transparent); }
+.lab-tone-section-rule { border-color: color-mix(in oklch, var(--portfolio-tone) 32%, var(--border)); }
+
 @keyframes ocean-current-drift { to { stroke-dashoffset: -80; } }
 @keyframes ocean-particle-drift { 0%, 100% { transform: translate3d(0,0,0); opacity: .3; } 50% { transform: translate3d(7px,-12px,0); opacity: .8; } }
 @keyframes archive-flow-sweep { from { transform: translateX(-110%); } to { transform: translateX(410%); } }

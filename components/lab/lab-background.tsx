@@ -45,13 +45,12 @@ export function LabBackground({ stage, quiet = false }: LabBackgroundProps) {
         sizes="100vw"
         className={cn(`scale-110 object-cover blur-[3px]`, quiet ? `opacity-[0.035] dark:opacity-[0.08]` : `opacity-15 dark:opacity-40`)}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_10%,oklch(0.68_0.19_255/0.18),transparent_55%),radial-gradient(ellipse_at_85%_80%,oklch(0.66_0.24_300/0.16),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_10%,oklch(0.68_0.19_255/0.18),transparent_55%),radial-gradient(ellipse_at_85%_80%,oklch(0.66_0.24_300/0.16),transparent_55%),radial-gradient(ellipse_at_12%_76%,oklch(0.68_0.14_160/0.07),transparent_45%),radial-gradient(ellipse_at_70%_40%,oklch(0.74_0.14_82/0.05),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,color-mix(in_oklch,var(--background)_92%,transparent)_85%)]" />
       <div className="lab-grid absolute inset-0" />
 
-      {!quiet && (
       <svg
-        className="absolute inset-0 h-full w-full"
+        className={cn('absolute inset-0 h-full w-full', quiet && 'lab-background-flow-quiet')}
         viewBox="0 0 1200 820"
         preserveAspectRatio="xMidYMid slice"
       >
@@ -75,8 +74,8 @@ export function LabBackground({ stage, quiet = false }: LabBackgroundProps) {
               strokeWidth={1.2}
               strokeDasharray="6 10"
               className={cn(
-                'transition-opacity duration-700',
-                ingestActive ? 'animate-dash opacity-60' : 'opacity-15',
+                quiet ? 'lab-background-flow-path opacity-40' : 'transition-opacity duration-700',
+                !quiet && (ingestActive ? 'animate-dash opacity-60' : 'opacity-15'),
               )}
             />
           )),
@@ -90,28 +89,26 @@ export function LabBackground({ stage, quiet = false }: LabBackgroundProps) {
             strokeWidth={1.4}
             strokeDasharray="6 10"
             className={cn(
-              'transition-opacity duration-700',
-              transformActive ? 'animate-dash opacity-70' : 'opacity-10',
+              quiet ? 'lab-background-flow-path opacity-35' : 'transition-opacity duration-700',
+              !quiet && (transformActive ? 'animate-dash opacity-70' : 'opacity-10'),
             )}
           />
         ))}
 
         {SOURCES.map((s) => (
-          <g key={s.label} className="transition-opacity duration-700" opacity={ingestActive ? 1 : 0.35}>
+          <g key={s.label} className={quiet ? undefined : 'transition-opacity duration-700'} opacity={quiet ? 0.5 : ingestActive ? 1 : 0.35}>
             <circle
               cx={s.x}
               cy={s.y}
               r={7}
               fill="var(--lab-blue)"
-              filter={ingestActive ? 'url(#lab-glow)' : undefined}
+              filter={!quiet && ingestActive ? 'url(#lab-glow)' : undefined}
             />
-            <text x={s.x + 16} y={s.y + 4} fill="var(--lab-blue)" fontSize={12} className="font-mono" opacity={0.7}>
-              {s.label}
-            </text>
+            {!quiet && <text x={s.x + 16} y={s.y + 4} fill="var(--lab-blue)" fontSize={12} className="font-mono" opacity={0.7}>{s.label}</text>}
           </g>
         ))}
         {TRANSFORMS.map((t) => (
-          <g key={t.label} className="transition-opacity duration-700" opacity={transformActive ? 1 : 0.3}>
+          <g key={t.label} className={quiet ? undefined : 'transition-opacity duration-700'} opacity={quiet ? 0.45 : transformActive ? 1 : 0.3}>
             <rect
               x={t.x - 9}
               y={t.y - 9}
@@ -121,22 +118,17 @@ export function LabBackground({ stage, quiet = false }: LabBackgroundProps) {
               fill="none"
               stroke="var(--lab-purple)"
               strokeWidth={2}
-              filter={transformActive ? 'url(#lab-glow)' : undefined}
+              filter={!quiet && transformActive ? 'url(#lab-glow)' : undefined}
             />
-            <text x={t.x + 18} y={t.y + 4} fill="var(--lab-purple)" fontSize={12} className="font-mono" opacity={0.7}>
-              {t.label}
-            </text>
+            {!quiet && <text x={t.x + 18} y={t.y + 4} fill="var(--lab-purple)" fontSize={12} className="font-mono" opacity={0.7}>{t.label}</text>}
           </g>
         ))}
-        <g className="transition-opacity duration-1000" opacity={outputActive ? 1 : 0}>
-          <circle cx={OUTPUT.x} cy={OUTPUT.y} r={22} fill="none" stroke="var(--lab-cyan)" strokeWidth={1} opacity={0.5} />
-          <circle cx={OUTPUT.x} cy={OUTPUT.y} r={10} fill="var(--lab-cyan)" filter="url(#lab-glow)" />
-          <text x={OUTPUT.x - 52} y={OUTPUT.y + 44} fill="var(--lab-cyan)" fontSize={12} className="font-mono">
-            {OUTPUT.label}
-          </text>
+        <g className={quiet ? undefined : 'transition-opacity duration-1000'} opacity={quiet ? 0.45 : outputActive ? 1 : 0}>
+          <circle cx={OUTPUT.x} cy={OUTPUT.y} r={quiet ? 13 : 22} fill="none" stroke="var(--lab-cyan)" strokeWidth={1} opacity={0.5} />
+          <circle cx={OUTPUT.x} cy={OUTPUT.y} r={quiet ? 5 : 10} fill="var(--lab-cyan)" filter={!quiet ? 'url(#lab-glow)' : undefined} />
+          {!quiet && <text x={OUTPUT.x - 52} y={OUTPUT.y + 44} fill="var(--lab-cyan)" fontSize={12} className="font-mono">{OUTPUT.label}</text>}
         </g>
       </svg>
-      )}
 
       {!quiet && PARTICLES.map((p, i) => (
         <span

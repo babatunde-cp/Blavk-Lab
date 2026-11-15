@@ -1,7 +1,7 @@
 export const professionalProfile = {
   id: 'BK001',
   name: 'Babatunde Kareem',
-  professionalFocus: 'Data Analytics & Data Engineering',
+  professionalFocus: 'Data Analytics and Engineering',
   coreTools: 'Excel, SQL, Power BI',
   engineeringJourney: 'Python, Apache & Data Systems',
   about: [

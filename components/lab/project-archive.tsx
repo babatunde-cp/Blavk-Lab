@@ -5,6 +5,13 @@ import { archiveProjects, archiveToolGroups, engineeringProjects, type ArchivePr
 
 const CATEGORY = 'ANALYTICS'
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
+const ANALYTICS_PROJECT_TONES = ['tone-sky', 'tone-teal', 'tone-violet', 'tone-amber', 'tone-rose']
+const ENGINEERING_PROJECT_TONES = ['tone-indigo', 'tone-emerald', 'tone-amber']
+function projectTone(project: ArchiveProject) {
+  return project.category === 'Engineering'
+    ? ENGINEERING_PROJECT_TONES[Math.max(0, engineeringProjects.indexOf(project)) % ENGINEERING_PROJECT_TONES.length]
+    : ANALYTICS_PROJECT_TONES[Math.max(0, archiveProjects.indexOf(project)) % ANALYTICS_PROJECT_TONES.length]
+}
 const prefersReducedMotion = () => window.matchMedia(REDUCED_MOTION).matches
 
 function useReducedMotion() {
@@ -46,8 +53,9 @@ function OceanicAtmosphere() {
 }
 
 function ProjectPreview({ project }: { project: ArchiveProject }) {
+  const tone = projectTone(project)
   return (
-    <div className="relative mt-4 flex aspect-video items-center justify-center overflow-hidden rounded-md border border-lab-blue/20 bg-[#081323]">
+    <div className={`lab-tone ${tone} lab-tone-surface relative mt-4 flex aspect-video items-center justify-center overflow-hidden rounded-md border bg-[#081323]`}>
       {project.image ? (
         <img src={project.image} alt={project.imageAlt ?? ''} loading="lazy" decoding="async" className="h-full w-full object-contain" />
       ) : <>
@@ -67,6 +75,7 @@ function ProjectPreview({ project }: { project: ArchiveProject }) {
 
 function ProjectCard({ project }: { project: ArchiveProject }) {
   const [flipped, setFlipped] = useState(false)
+  const tone = projectTone(project)
   const flip = useCallback(() => setFlipped((current) => !current), [])
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.repeat) return
@@ -88,34 +97,34 @@ function ProjectCard({ project }: { project: ArchiveProject }) {
         onKeyDown={handleKeyDown}
       >
         <div className={`project-flip-inner relative h-full w-full ${flipped ? 'is-flipped' : ''}`}>
-          <article className="project-flip-face absolute inset-0 flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card/95 p-5 shadow-[0_18px_55px_-38px_var(--lab-blue)] sm:p-6" aria-hidden={flipped}>
+          <article className={`lab-tone ${tone} lab-tone-surface project-flip-face absolute inset-0 flex flex-col overflow-hidden rounded-xl border bg-card/95 p-5 shadow-[0_18px_55px_-38px_var(--lab-blue)] sm:p-6`} aria-hidden={flipped}>
             <div className="flex items-center justify-between gap-3">
-              <span className={`inline-flex items-center gap-2 font-mono text-[10px] tracking-wider ${project.status === 'Completed' ? 'text-emerald-300' : 'text-red-300'}`}>
+                <span className={`inline-flex items-center gap-2 font-mono text-[10px] tracking-wider ${project.status === 'Completed' ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'}`}>
                 <span aria-hidden="true" className={`h-2 w-2 rounded-full ${project.status === 'Completed' ? 'status-dot-completed bg-emerald-400' : 'bg-red-400'}`} />
                 {project.status.toUpperCase()}
               </span>
             </div>
-            <h3 className="mt-3 text-lg font-semibold leading-snug text-foreground sm:text-xl">{project.title}</h3>
+            <h3 className="lab-tone-label mt-3 text-lg font-semibold leading-snug sm:text-xl">{project.title}</h3>
             <ProjectPreview project={project} />
           </article>
-          <article className="project-flip-face project-flip-back absolute inset-0 flex flex-col overflow-y-auto rounded-xl border border-lab-blue/35 bg-[#071326] p-5 text-left shadow-[0_18px_55px_-38px_var(--lab-blue)] sm:p-6" aria-hidden={!flipped}>
+          <article className={`lab-tone ${tone} lab-tone-surface project-flip-face project-flip-back absolute inset-0 flex flex-col overflow-y-auto rounded-xl border bg-[#071326] p-5 text-left shadow-[0_18px_55px_-38px_var(--lab-blue)] sm:p-6`} aria-hidden={!flipped}>
             <div className="flex items-center justify-between gap-3">
-              <span className="font-mono text-[10px] tracking-[0.18em] text-lab-cyan">PROJECT DETAILS</span>
-              <span className={`inline-flex items-center gap-2 font-mono text-[10px] ${project.status === 'Completed' ? 'text-emerald-300' : 'text-red-300'}`}>
+              <span className="lab-tone-label font-mono text-[10px] tracking-[0.18em]">PROJECT DETAILS</span>
+              <span className={`inline-flex items-center gap-2 font-mono text-[10px] ${project.status === 'Completed' ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'}`}>
                 <span aria-hidden="true" className={`h-2 w-2 rounded-full ${project.status === 'Completed' ? 'status-dot-completed bg-emerald-400' : 'bg-red-400'}`} />
                 {project.status.toUpperCase()}
               </span>
             </div>
-            <h3 className="mt-3 text-lg font-semibold leading-snug text-foreground sm:text-xl">{project.title}</h3>
+            <h3 className="lab-tone-label mt-3 text-lg font-semibold leading-snug sm:text-xl">{project.title}</h3>
             <p className="mt-2 text-xs leading-5 text-slate-300 sm:text-sm sm:leading-5">{project.details}</p>
             <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
-              {project.tools.map((tool) => <span key={tool} className="rounded border border-lab-blue/25 bg-lab-blue/10 px-2 py-1 font-mono text-[9px] text-slate-200">{tool}</span>)}
+              {project.tools.map((tool) => <span key={tool} className="lab-tone-surface relative rounded border bg-lab-blue/10 px-2 py-1 font-mono text-[9px] text-slate-200">{tool}</span>)}
             </div>
           </article>
         </div>
       </div>
       {project.projectUrl ? (
-        <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} project on GitHub (opens in a new tab)`} className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-lab-blue/45 bg-lab-blue/5 px-4 py-2.5 font-mono text-xs tracking-[0.14em] text-lab-cyan transition-colors hover:border-lab-cyan/70 hover:bg-lab-cyan/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-cyan">
+        <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} project on GitHub (opens in a new tab)`} className={`lab-tone ${tone} lab-tone-link mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 font-mono text-xs tracking-[0.14em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-cyan`}>
           VIEW PROJECT <span aria-hidden="true">↗</span>
         </a>
       ) : (
@@ -250,20 +259,14 @@ export function ProjectArchive() {
       <OceanicAtmosphere />
       <div className="relative z-10 mx-auto max-w-4xl">
         <header className="max-w-2xl">
-          <h2 id="selected-works-heading" className="inline-flex rounded-md border border-lab-blue/25 bg-lab-blue/5 px-3 py-2 font-mono text-lg font-semibold tracking-[0.12em] text-lab-cyan sm:text-xl"><code>INDEX_LOGS</code></h2>
+          <h2 id="selected-works-heading" className="lab-tone tone-cyan lab-tone-surface lab-tone-label relative inline-flex rounded-md border bg-lab-blue/5 px-3 py-2 font-mono text-lg font-semibold tracking-[0.12em] sm:text-xl"><code>INDEX_LOGS</code></h2>
         </header>
-
-        <div className="mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-lab-blue/15 py-3 font-mono text-[9px] tracking-[0.13em] text-muted-foreground sm:gap-x-5 sm:text-[10px]" aria-label="Illustrative analytical flow">
-          <span className="text-lab-cyan/80">ANALYTICAL FLOW · ILLUSTRATIVE</span>
-          <span aria-hidden="true" className="hidden h-px min-w-4 flex-1 bg-gradient-to-r from-lab-cyan/50 via-lab-blue/30 to-transparent sm:block" />
-          <span>SOURCE DATA <b className="px-1 text-lab-cyan">→</b> EXCEL · POWER BI · SQL <b className="px-1 text-lab-cyan">→</b> ANALYSIS <b className="px-1 text-lab-cyan">→</b> INSIGHTS</span>
-        </div>
 
         <section id="analytics" ref={categoryRef} className="relative mt-14 scroll-mt-24" aria-labelledby="analytics-category-heading">
           <div className="archive-flow-track mb-5" aria-hidden="true"><span className={categoryStarted ? 'archive-flow-sweep' : ''} /></div>
-          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-lab-blue/20 pb-5">
+          <div className="lab-tone tone-sky flex flex-wrap items-end justify-between gap-4 border-b border-[color-mix(in_oklch,var(--portfolio-tone)_32%,var(--border))] pb-5">
             <div>
-              <h3 id="analytics-category-heading" className="mt-2 min-h-[2.3rem] font-mono text-xl font-semibold tracking-[0.08em] text-foreground sm:text-2xl">{categoryStarted ? CATEGORY.slice(0, reducedMotion ? CATEGORY.length : typedCharacters) : ''}<span className={categoryStarted && !initialized && !reducedMotion ? 'archive-caret' : 'sr-only'} aria-hidden="true">|</span></h3>
+              <h3 id="analytics-category-heading" className="lab-tone-label mt-2 min-h-[2.3rem] font-mono text-base font-semibold tracking-[0.08em] sm:text-lg">{categoryStarted ? CATEGORY.slice(0, reducedMotion ? CATEGORY.length : typedCharacters) : ''}<span className={categoryStarted && !initialized && !reducedMotion ? 'archive-caret' : 'sr-only'} aria-hidden="true">|</span></h3>
             </div>
             {initialized && <p className="animate-fade-up font-mono text-[10px] tracking-[0.14em] text-lab-cyan motion-reduce:animate-none" role="status">[CATEGORY INITIALIZED]</p>}
           </div>
@@ -271,9 +274,9 @@ export function ProjectArchive() {
           <div className="mt-7 space-y-10 sm:mt-9 sm:space-y-14">
             {archiveToolGroups.map(({ tool, description }, index) => visibleGroups > index && (
               <section id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}`} key={tool} className="animate-fade-up scroll-mt-24 motion-reduce:animate-none" aria-labelledby={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}-heading`}>
-                <div className="mb-5 flex flex-col gap-1.5 border-l-2 border-lab-cyan/50 pl-4 sm:mb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+                <div className={`lab-tone ${tool === 'Excel' ? 'tone-emerald' : tool === 'Power BI' ? 'tone-violet' : 'tone-amber'} mb-5 flex flex-col gap-1.5 border-l-2 border-[color:var(--portfolio-tone)] pl-4 sm:mb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4`}>
                   <div>
-                    <h4 id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}-heading`} className="text-xl font-semibold tracking-wide text-foreground sm:text-2xl">{tool.toUpperCase()}</h4>
+                    <h4 id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}-heading`} className="lab-tone-label text-sm font-semibold tracking-wide sm:text-base">{tool.toUpperCase()}</h4>
                   </div>
                   <p className="max-w-xl text-sm leading-6 text-muted-foreground">{description}</p>
                 </div>
@@ -287,9 +290,9 @@ export function ProjectArchive() {
 
         <section id="engineering" ref={engineeringRef} className="relative mt-24 scroll-mt-24 border-t border-lab-blue/20 pt-12 sm:mt-32 sm:pt-16" aria-labelledby="engineering-category-heading">
           <div className="archive-flow-track mb-5" aria-hidden="true"><span className={engineeringStarted ? 'archive-flow-sweep' : ''} /></div>
-          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-lab-blue/20 pb-5">
+          <div className="lab-tone tone-violet flex flex-wrap items-end justify-between gap-4 border-b border-[color-mix(in_oklch,var(--portfolio-tone)_32%,var(--border))] pb-5">
             <div>
-              <h3 id="engineering-category-heading" className="mt-2 min-h-[2.3rem] font-mono text-xl font-semibold tracking-[0.08em] text-foreground sm:text-2xl">{engineeringStarted ? 'ENGINEERING'.slice(0, reducedMotion ? 'ENGINEERING'.length : engineeringTyped) : ''}<span className={engineeringStarted && !engineeringInitialized && !reducedMotion ? 'archive-caret' : 'sr-only'} aria-hidden="true">|</span></h3>
+              <h3 id="engineering-category-heading" className="lab-tone-label mt-2 min-h-[2.3rem] font-mono text-base font-semibold tracking-[0.08em] sm:text-lg">{engineeringStarted ? 'ENGINEERING'.slice(0, reducedMotion ? 'ENGINEERING'.length : engineeringTyped) : ''}<span className={engineeringStarted && !engineeringInitialized && !reducedMotion ? 'archive-caret' : 'sr-only'} aria-hidden="true">|</span></h3>
             </div>
             {engineeringInitialized && <p className="animate-fade-up font-mono text-[10px] tracking-[0.14em] text-lab-cyan motion-reduce:animate-none" role="status">[CATEGORY INITIALIZED]</p>}
           </div>

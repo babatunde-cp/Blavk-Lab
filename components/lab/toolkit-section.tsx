@@ -46,13 +46,16 @@ const stages = [
   },
 ] as const
 
+const stageTones = ['tone-sky', 'tone-cyan', 'tone-teal', 'tone-emerald', 'tone-indigo', 'tone-violet', 'tone-rose', 'tone-amber', 'tone-sky']
+
 function ToolGroup({ label, tools, tone }: { label: string; tools: readonly string[]; tone: 'analytics' | 'engineering' }) {
+  const accent = tone === 'analytics' ? 'tone-cyan' : 'tone-violet'
   return (
-    <div className="min-w-0">
-      <h4 className={`font-mono text-[10px] tracking-[0.16em] ${tone === 'analytics' ? 'text-lab-cyan' : 'text-sky-300'}`}>{label}</h4>
+    <div className={`lab-tone ${accent} min-w-0`}>
+      <h4 className="lab-tone-label font-mono text-[10px] tracking-[0.16em]">{label}</h4>
       <ul className="mt-2 flex flex-wrap gap-2">
         {tools.map((tool) => (
-          <li key={tool} className="rounded-md border border-border/80 bg-background px-2.5 py-1.5 text-xs leading-5 text-foreground sm:text-[13px]">{tool}</li>
+          <li key={tool} className="lab-tone-surface relative rounded-md border bg-background px-2.5 py-1.5 text-xs leading-5 text-foreground sm:text-[13px]">{tool}</li>
         ))}
       </ul>
     </div>
@@ -65,16 +68,16 @@ export function ToolkitSection() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_0%,oklch(0.55_0.16_225_/_0.10),transparent_48%)]" />
       <div className="relative z-10 mx-auto max-w-4xl">
         <header className="max-w-2xl">
-          <p className="font-mono text-[10px] tracking-[0.2em] text-lab-cyan">DATA LIFECYCLE <span className="text-muted-foreground">/ ANALYTICS + ENGINEERING</span></p>
+          <p className="lab-tone tone-indigo lab-tone-label font-mono text-[10px] tracking-[0.2em]">DATA LIFECYCLE <span className="text-muted-foreground">/ ANALYTICS + ENGINEERING</span></p>
           <h2 id="toolkits-heading" className="mt-3 font-mono text-2xl font-semibold tracking-[0.12em] text-foreground sm:text-3xl">TOOLKITS</h2>
           <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">A connected map of tools for taking data from source to reliable, useful outputs.</p>
         </header>
 
         <ol className="mt-8 space-y-4">
           {stages.map((stage) => (
-            <li key={stage.number} className="relative grid min-w-0 grid-cols-1 gap-3 rounded-xl border border-border/80 bg-card/90 p-4 shadow-[0_14px_44px_-36px_var(--lab-blue)] sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:gap-5 sm:p-5">
+            <li key={stage.number} className={`lab-tone ${stageTones[Number(stage.number) - 1]} lab-tone-surface relative grid min-w-0 grid-cols-1 gap-3 rounded-xl border bg-card/90 p-4 shadow-[0_14px_44px_-36px_var(--lab-blue)] sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:gap-5 sm:p-5`}>
               <div className="flex items-center gap-3 sm:block">
-                <span className="font-mono text-xs tracking-widest text-lab-cyan">STAGE {stage.number}</span>
+                <span className="lab-tone-label font-mono text-xs tracking-widest">STAGE {stage.number}</span>
                 <h3 className="font-mono text-[11px] font-semibold tracking-[0.1em] text-foreground sm:mt-2 sm:leading-5">{stage.title}</h3>
               </div>
               <div className={`grid min-w-0 grid-cols-1 gap-4 border-t border-border/70 pt-4 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0 ${stage.analytics.length && stage.engineering.length ? 'sm:grid-cols-2' : 'sm:grid-cols-1'}`}>
