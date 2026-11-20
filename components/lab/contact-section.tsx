@@ -44,7 +44,7 @@ function ContactIcon({ name }: { name: ContactIconName }) {
 
 export function ContactSection() {
   return (
-    <section id="contacts" className="relative scroll-mt-20 border-t border-rose-400/25 px-4 py-16 sm:px-8 sm:py-24" aria-labelledby="contacts-heading">
+    <section id="contacts" data-scroll-reveal className="relative scroll-mt-20 border-t border-rose-400/25 px-4 py-16 sm:px-8 sm:py-24" aria-labelledby="contacts-heading">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_10%_40%,oklch(0.58_0.17_350_/_0.08),transparent_42%),radial-gradient(ellipse_at_90%_85%,oklch(0.55_0.14_175_/_0.08),transparent_40%)]" />
       <div className="relative z-10 mx-auto max-w-4xl">
         <header>
@@ -55,7 +55,7 @@ export function ContactSection() {
 
         <ul className="mt-7 flex items-center justify-center gap-3" aria-label="Contact links">
           {contactLinks.map(({ name, label, href, external, color }) => (
-            <li key={name}>
+            <li key={name} data-scroll-reveal>
               <a
                 href={href}
                 target={external ? '_blank' : undefined}

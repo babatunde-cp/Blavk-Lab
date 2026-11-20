@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { archiveProjects, archiveToolGroups, engineeringProjects, type ArchiveProject, type ProjectTool } from '@/lib/project-archive'
+import { NorthstarPipelineExplorer } from '@/components/lab/northstar-pipeline-explorer'
 
 const CATEGORY = 'ANALYTICS'
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
@@ -73,7 +74,7 @@ function ProjectPreview({ project }: { project: ArchiveProject }) {
   )
 }
 
-function ProjectCard({ project }: { project: ArchiveProject }) {
+function ProjectCard({ project, revealDelay = 0 }: { project: ArchiveProject; revealDelay?: number }) {
   const [flipped, setFlipped] = useState(false)
   const tone = projectTone(project)
   const flip = useCallback(() => setFlipped((current) => !current), [])
@@ -86,7 +87,7 @@ function ProjectCard({ project }: { project: ArchiveProject }) {
   }
 
   return (
-    <div className="min-w-0">
+    <div data-scroll-reveal style={{ '--scroll-reveal-delay': `${revealDelay}ms` } as React.CSSProperties} className="min-w-0">
       <div
         className="project-flip-control h-[370px] w-full cursor-pointer rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-cyan focus-visible:ring-offset-4 focus-visible:ring-offset-background"
         role="button"
@@ -103,6 +104,7 @@ function ProjectCard({ project }: { project: ArchiveProject }) {
                 <span aria-hidden="true" className={`h-2 w-2 rounded-full ${project.status === 'Completed' ? 'status-dot-completed bg-emerald-400' : 'bg-red-400'}`} />
                 {project.status.toUpperCase()}
               </span>
+              {project.publishedScope && <span title={`Project scope: ${project.publishedScope}`} className="min-w-0 truncate text-right font-mono text-[9px] tracking-wide text-slate-400">SCOPE · {project.publishedScope}</span>}
             </div>
             <h3 className="lab-tone-label mt-3 text-lg font-semibold leading-snug sm:text-xl">{project.title}</h3>
             <ProjectPreview project={project} />
@@ -255,7 +257,7 @@ export function ProjectArchive() {
   }, [engineeringStarted, reducedMotion])
 
   return (
-    <section id="index-logs" className="ocean-archive relative isolate mt-20 scroll-mt-20 overflow-hidden border-y border-lab-blue/15 px-4 py-16 sm:mt-28 sm:px-8 sm:py-24" aria-labelledby="selected-works-heading">
+    <section id="index-logs" data-scroll-reveal className="ocean-archive relative isolate mt-20 scroll-mt-20 overflow-hidden border-y border-lab-blue/15 px-4 py-16 sm:mt-28 sm:px-8 sm:py-24" aria-labelledby="selected-works-heading">
       <OceanicAtmosphere />
       <div className="relative z-10 mx-auto max-w-4xl">
         <header className="max-w-2xl">
@@ -273,7 +275,7 @@ export function ProjectArchive() {
 
           <div className="mt-7 space-y-10 sm:mt-9 sm:space-y-14">
             {archiveToolGroups.map(({ tool, description }, index) => visibleGroups > index && (
-              <section id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}`} key={tool} className="animate-fade-up scroll-mt-24 motion-reduce:animate-none" aria-labelledby={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}-heading`}>
+              <section id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}`} key={tool} data-scroll-reveal className="animate-fade-up scroll-mt-24 motion-reduce:animate-none" aria-labelledby={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}-heading`}>
                 <div className={`lab-tone ${tool === 'Excel' ? 'tone-emerald' : tool === 'Power BI' ? 'tone-violet' : 'tone-amber'} mb-5 flex flex-col gap-1.5 border-l-2 border-[color:var(--portfolio-tone)] pl-4 sm:mb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4`}>
                   <div>
                     <h4 id={`tool-${tool.toLowerCase().replace(/\s+/g, '-')}-heading`} className="lab-tone-label text-sm font-semibold tracking-wide sm:text-base">{tool.toUpperCase()}</h4>
@@ -281,14 +283,14 @@ export function ProjectArchive() {
                   <p className="max-w-xl text-sm leading-6 text-muted-foreground">{description}</p>
                 </div>
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
-                  {archiveProjects.filter((project) => project.tool === (tool as ProjectTool)).map((project) => <ProjectCard key={project.id} project={project} />)}
+                  {archiveProjects.filter((project) => project.tool === (tool as ProjectTool)).map((project, cardIndex) => <ProjectCard key={project.id} project={project} revealDelay={cardIndex * 90} />)}
                 </div>
               </section>
             ))}
           </div>
         </section>
 
-        <section id="engineering" ref={engineeringRef} className="relative mt-24 scroll-mt-24 border-t border-lab-blue/20 pt-12 sm:mt-32 sm:pt-16" aria-labelledby="engineering-category-heading">
+        <section id="engineering" ref={engineeringRef} data-scroll-reveal className="relative mt-24 scroll-mt-24 border-t border-lab-blue/20 pt-12 sm:mt-32 sm:pt-16" aria-labelledby="engineering-category-heading">
           <div className="archive-flow-track mb-5" aria-hidden="true"><span className={engineeringStarted ? 'archive-flow-sweep' : ''} /></div>
           <div className="lab-tone tone-violet flex flex-wrap items-end justify-between gap-4 border-b border-[color-mix(in_oklch,var(--portfolio-tone)_32%,var(--border))] pb-5">
             <div>
@@ -299,9 +301,10 @@ export function ProjectArchive() {
           {engineeringInitialized && (
             <div className="mt-7 space-y-10 animate-fade-up motion-reduce:animate-none">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
-                {engineeringProjects.map((project) => <ProjectCard key={project.id} project={project} />)}
+                {engineeringProjects.map((project, cardIndex) => <ProjectCard key={project.id} project={project} revealDelay={cardIndex * 90} />)}
               </div>
-              <aside className="relative overflow-hidden rounded-xl border border-lab-cyan/20 bg-gradient-to-r from-lab-blue/10 via-slate-950/35 to-lab-cyan/5 px-5 py-6 sm:px-7 sm:py-8" aria-label="More projects coming soon">
+              <NorthstarPipelineExplorer />
+              <aside data-scroll-reveal className="relative overflow-hidden rounded-xl border border-lab-cyan/20 bg-gradient-to-r from-lab-blue/10 via-slate-950/35 to-lab-cyan/5 px-5 py-6 sm:px-7 sm:py-8" aria-label="More projects coming soon">
                 <div aria-hidden="true" className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-lab-cyan/70 via-lab-blue/40 to-transparent" />
                 <p className="font-mono text-[10px] tracking-[0.2em] text-lab-cyan">NEXT_SIGNAL <span className="text-muted-foreground">// INCOMING</span></p>
                 <p className="mt-2 text-base font-medium text-foreground sm:text-lg">More projects are on the horizon.</p>

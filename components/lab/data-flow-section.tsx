@@ -95,7 +95,7 @@ const stageAccents = ['tone-sky', 'tone-cyan', 'tone-teal', 'tone-emerald', 'ton
 
 export function DataFlowSection() {
   return (
-    <section id="data-flow" className="relative scroll-mt-20 border-t border-lab-blue/20 px-4 py-16 sm:px-8 sm:py-24" aria-labelledby="data-flow-heading">
+    <section id="data-flow" data-scroll-reveal className="relative scroll-mt-20 border-t border-lab-blue/20 px-4 py-16 sm:px-8 sm:py-24" aria-labelledby="data-flow-heading">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_12%,oklch(0.55_0.16_205_/_0.10),transparent_42%),radial-gradient(ellipse_at_88%_80%,oklch(0.5_0.18_260_/_0.08),transparent_40%)]" />
       <div className="relative z-10 mx-auto max-w-4xl">
         <header className="max-w-2xl">
@@ -106,7 +106,7 @@ export function DataFlowSection() {
 
         <ol className="mt-8 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
           {stages.map((stage, index) => (
-            <li key={stage.number} className={`lab-tone ${stageAccents[index]} min-w-0 rounded-xl border bg-gradient-to-br p-4 shadow-[0_14px_44px_-36px_var(--lab-blue)] sm:p-5 ${stage.tone}`}>
+            <li key={stage.number} data-scroll-reveal className={`lab-tone ${stageAccents[index]} min-w-0 rounded-xl border bg-gradient-to-br p-4 shadow-[0_14px_44px_-36px_var(--lab-blue)] sm:p-5 ${stage.tone}`}>
               <div className="flex items-start gap-3">
                 <span className="lab-tone-label shrink-0 rounded-md border border-current/15 bg-background/45 px-2 py-1 font-mono text-[11px] tracking-wider">{stage.number} -</span>
                 <h3 className="pt-1 font-mono text-xs font-semibold tracking-[0.1em] text-foreground sm:text-sm">{stage.title}</h3>

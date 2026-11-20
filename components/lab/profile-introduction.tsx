@@ -8,6 +8,7 @@ import { ThemeToggle } from '@/components/lab/theme-toggle'
 import { ToolkitSection } from '@/components/lab/toolkit-section'
 import { DataFlowSection } from '@/components/lab/data-flow-section'
 import { ContactSection } from '@/components/lab/contact-section'
+import { ScrollMotion } from '@/components/lab/scroll-motion'
 import { Download } from 'lucide-react'
 import { profileQuery, profileRows, professionalProfile } from '@/lib/professional-profile'
 import { ProjectArchive } from './project-archive'
@@ -116,6 +117,7 @@ export function ProfileIntroduction() {
 
   return (
     <div className="relative isolate min-h-dvh">
+      <ScrollMotion />
       <LabBackground stage={0} quiet />
       <header className="sticky top-0 z-20 border-b border-border/60 bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-3 px-4">
@@ -200,7 +202,7 @@ export function ProfileIntroduction() {
         )}
 
         {aboutVisible && (
-          <section id="about-me" className="lab-tone tone-amber mt-12 scroll-mt-24 max-w-3xl animate-fade-up motion-reduce:animate-none sm:mt-16" aria-labelledby="about-heading">
+          <section id="about-me" data-scroll-reveal className="lab-tone tone-amber mt-12 scroll-mt-24 max-w-3xl animate-fade-up motion-reduce:animate-none sm:mt-16" aria-labelledby="about-heading">
             <h2 id="about-heading" className="lab-tone-label text-2xl font-semibold tracking-tight sm:text-3xl">Beyond the data.</h2>
             <div className="mt-4 text-pretty text-sm leading-7 text-muted-foreground sm:text-base sm:leading-8">
               {professionalProfile.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
