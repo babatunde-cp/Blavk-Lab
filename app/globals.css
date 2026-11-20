@@ -199,6 +199,38 @@
   }
 }
 
+/* Scroll-linked reveals stay visible without JavaScript and when reduced motion is preferred. */
+[data-scroll-reveal] {
+  transition: opacity 680ms cubic-bezier(0.2, 0.7, 0.2, 1), transform 680ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--scroll-reveal-delay, 0ms);
+}
+html.scroll-motion-ready [data-scroll-reveal]:not([data-in-view='true']) {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0) scale(.99);
+}
+#toolkits ol > li:nth-child(2), #data-flow ol > li:nth-child(2) { --scroll-reveal-delay: 45ms; }
+#toolkits ol > li:nth-child(3), #data-flow ol > li:nth-child(3) { --scroll-reveal-delay: 90ms; }
+#toolkits ol > li:nth-child(4), #data-flow ol > li:nth-child(4) { --scroll-reveal-delay: 135ms; }
+#toolkits ol > li:nth-child(5), #data-flow ol > li:nth-child(5) { --scroll-reveal-delay: 180ms; }
+#toolkits ol > li:nth-child(6), #data-flow ol > li:nth-child(6) { --scroll-reveal-delay: 225ms; }
+#toolkits ol > li:nth-child(7), #data-flow ol > li:nth-child(7) { --scroll-reveal-delay: 270ms; }
+#toolkits ol > li:nth-child(8), #data-flow ol > li:nth-child(8) { --scroll-reveal-delay: 315ms; }
+#toolkits ol > li:nth-child(9), #data-flow ol > li:nth-child(9) { --scroll-reveal-delay: 360ms; }
+#data-flow ol > li:nth-child(10) { --scroll-reveal-delay: 405ms; }
+#contacts li:nth-child(2) { --scroll-reveal-delay: 60ms; }
+#contacts li:nth-child(3) { --scroll-reveal-delay: 120ms; }
+#contacts li:nth-child(4) { --scroll-reveal-delay: 180ms; }
+.portfolio-scroll-progress {
+  pointer-events: none;
+  transition: transform 90ms linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-reveal],
+  .portfolio-scroll-progress {
+    transition: none !important;
+  }
+}
+
 /* Oceanic project archive atmosphere and accessible card motion. */
 .ocean-archive {
   background-image:

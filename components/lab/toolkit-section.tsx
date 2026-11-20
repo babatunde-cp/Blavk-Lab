@@ -64,7 +64,7 @@ function ToolGroup({ label, tools, tone }: { label: string; tools: readonly stri
 
 export function ToolkitSection() {
   return (
-    <section id="toolkits" className="relative scroll-mt-20 border-t border-lab-blue/20 px-4 py-16 sm:px-8 sm:py-24" aria-labelledby="toolkits-heading">
+    <section id="toolkits" data-scroll-reveal className="relative scroll-mt-20 border-t border-lab-blue/20 px-4 py-16 sm:px-8 sm:py-24" aria-labelledby="toolkits-heading">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_0%,oklch(0.55_0.16_225_/_0.10),transparent_48%)]" />
       <div className="relative z-10 mx-auto max-w-4xl">
         <header className="max-w-2xl">
@@ -75,7 +75,7 @@ export function ToolkitSection() {
 
         <ol className="mt-8 space-y-4">
           {stages.map((stage) => (
-            <li key={stage.number} className={`lab-tone ${stageTones[Number(stage.number) - 1]} lab-tone-surface relative grid min-w-0 grid-cols-1 gap-3 rounded-xl border bg-card/90 p-4 shadow-[0_14px_44px_-36px_var(--lab-blue)] sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:gap-5 sm:p-5`}>
+            <li key={stage.number} data-scroll-reveal className={`lab-tone ${stageTones[Number(stage.number) - 1]} lab-tone-surface relative grid min-w-0 grid-cols-1 gap-3 rounded-xl border bg-card/90 p-4 shadow-[0_14px_44px_-36px_var(--lab-blue)] sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:gap-5 sm:p-5`}>
               <div className="flex items-center gap-3 sm:block">
                 <span className="lab-tone-label font-mono text-xs tracking-widest">STAGE {stage.number}</span>
                 <h3 className="font-mono text-[11px] font-semibold tracking-[0.1em] text-foreground sm:mt-2 sm:leading-5">{stage.title}</h3>

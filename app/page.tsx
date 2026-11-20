@@ -1,16 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowUpRight, BarChart3, Terminal } from 'lucide-react'
+import { QuickProjectDemo } from '@/components/quick-project-demo'
 
 export const metadata: Metadata = {
   title: 'Welcome — Babatunde Kareem',
-  description: 'Choose Classic Mode for an easy portfolio tour or Deep Dive to explore the interactive data lab.',
+  description: 'Explore Babatunde Kareem’s business-focused analytics projects and developing data engineering work.',
 }
 
 const modes = [
   {
     label: 'CLASSIC MODE',
-    description: 'Browse my projects and experience in a clear, straightforward portfolio.',
+    description: 'Start with project highlights and plain-language takeaways. Easy to browse without a technical background.',
     href: '/classic.html',
     icon: BarChart3,
     tone: 'border-lab-cyan/30 from-lab-cyan/10 via-card/90 to-sky-950/50',
@@ -18,7 +19,7 @@ const modes = [
   },
   {
     label: 'DEEP DIVE',
-    description: 'Enter the interactive lab, meet the data, and explore the technical details.',
+    description: 'Explore how I prepare, validate, model, and report on data through project examples.',
     href: '/deep-dive',
     icon: Terminal,
     tone: 'border-lab-purple/30 from-lab-purple/10 via-card/90 to-indigo-950/50',
@@ -34,10 +35,10 @@ export default function Page() {
 
       <div className="mx-auto w-full max-w-5xl">
         <header className="mb-12 text-center sm:mb-14">
-          <p className="font-mono text-[10px] tracking-[0.28em] text-lab-cyan sm:text-xs">BABATUNDE KAREEM <span className="text-muted-foreground">/ PORTFOLIO</span></p>
-          <h1 className="mt-5 text-balance text-3xl font-semibold tracking-tight sm:text-5xl">Welcome to my portfolio.</h1>
-          <p className="mx-auto mt-4 max-w-xl text-pretty text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
-            Pick the experience that suits you. You can explore my work in a few clicks or take a closer look inside the data lab.
+          <p className="font-mono text-[10px] tracking-[0.22em] text-lab-cyan sm:text-xs">BABATUNDE KAREEM <span className="text-muted-foreground">/ DATA ANALYTICS + ENGINEERING</span></p>
+          <h1 className="mt-5 text-balance text-3xl font-semibold tracking-tight sm:text-5xl">From business questions to useful data.</h1>
+          <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
+            I build clear dashboards and dependable data workflows, with a focus on operations, inventory, and supply chain. Choose the view that feels right for you.
           </p>
         </header>
 
@@ -63,6 +64,19 @@ export default function Page() {
             </Link>
           ))}
         </nav>
+
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center font-mono text-[10px] tracking-[0.1em] text-muted-foreground sm:text-xs">
+          <span>SHORT ON TIME?</span>
+          <Link href="/classic.html#project" className="inline-flex min-h-9 items-center gap-2 text-lab-cyan transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-cyan">
+            START WITH THE PROJECTS <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          </Link>
+          <span aria-hidden="true" className="text-border">·</span>
+          <a href="#quick-demo" className="inline-flex min-h-9 items-center gap-2 text-lab-purple transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-purple">
+            TRY A QUICK DEMO <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+
+        <QuickProjectDemo />
       </div>
     </main>
   )
